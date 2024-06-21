@@ -6,6 +6,12 @@
 
 This guide shows you how to deploy your containers behind Traefik reverse-proxy. It will obtain and refresh `HTTPS` certificates automatically and it comes with password-protected Traefik dashboard.
 
+### Main container
+
+-   Docker Socket Proxy 1.62.1/latest
+-   Traefik 2.11.x or 3.0.x
+-   Logger Alpine Linux 3.19 or 3.20
+
 ## Run on Local Computer
 
 Docker container:
@@ -284,4 +290,4 @@ MIT / BSD
 
 ## Author Information
 
-This Docker Compose Traefik HTTPS was created in 2022 by [Asapdotid](https://github.com/asapdotid) 🚀
+This Docker Compose Traefik HTTPS was created in 2024 by [Asapdotid](https://github.com/asapdotid) 🚀
