@@ -1,0 +1,96 @@
+# version: "3.7"
+
+networks:
+  proxy:
+    driver: bridge
+    external: true
+  secure:
+    driver: bridge
+    external: true
+
+services:
+  dockersocket:
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - ALLOW_START=0 #optional
+      - ALLOW_STOP=0 #optional
+      - ALLOW_RESTARTS=0 #optional
+      - AUTH=0 #optional
+      - BUILD=0 #optional
+      - COMMIT=0 #optional
+      - CONFIGS=0 #optional
+      - CONTAINERS=1 #optional
+      - DISABLE_IPV6=0 #optional
+      - DISTRIBUTION=0
+      - EVENTS=1
+      - EXEC=0
+      - IMAGES=0
+      - INFO=1
+      - NETWORKS=1
+      - NODES=1
+      - PING=1
+      - POST=0
+      - PLUGINS=0
+      - SECRETS=0
+      - SERVICES=0
+      - SESSION=0
+      - SWARM=0
+      - SYSTEM=0
+      - TASKS=0
+      - VERSION=1
+      - VOLUMES=0
+    privileged: true
+    read_only: true
+    tmpfs:
+      - /run
+    networks:
+      - secure
+
+  traefik:
+    volumes:
+      - ${CURDIR}/.data/traefik/ssl/:/etc/traefik/ssl/
+      - ${CURDIR}/.logs/traefik/:/var/log/traefik/
+    environment:
+      - DOCKER_HOST=dockersocket
+    ports:
+      - "${TRAEFIK_HOST_HTTP_PORT:-80}:80"
+      - "${TRAEFIK_HOST_HTTPS_PORT:-443}:443"
+    networks:
+      - proxy
+      - secure
+    restart: unless-stopped
+    depends_on:
+      - dockersocket
+
+  logger:
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ${CURDIR}/.logs/traefik:/var/log/traefik
+    networks:
+      - secure
+    depends_on:
+      - traefik
+
+  # portainer:
+  #   image: portainer/portainer-ce:latest
+  #   restart: unless-stopped
+  #   security_opt:
+  #     - no-new-privileges:true
+  #   networks:
+  #     - secure
+  #     - proxy
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - ${CURDIR}/.data/portainer:/data
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.portainer.entrypoints=http
+  #     - traefik.http.routers.portainer.rule=Host(`portainer.${TRAEFIK_DOMAIN_NAME}`)
+  #     - traefik.http.services.portainer.loadbalancer.server.port=9000
+  #   depends_on:
+  #     - dockersocket
+  #     - traefik

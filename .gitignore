@@ -1,0 +1,15 @@
+.env
+/.idea
+/.vscode
+*.log
+*.DS_Store
+.DS_Store
+*/.DS_Store
+
+# Ignore volume for docker data
+/.data/traefik/*
+!/.data/traefik/.keepfile
+/.data/portainer/*
+!/.data/portainer/.keepfile
+/.logs/traefik/*
+!/.logs/traefik/.keepfile
