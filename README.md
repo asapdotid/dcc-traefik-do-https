@@ -8,7 +8,7 @@ This guide shows you how to deploy your containers behind Traefik reverse-proxy.
 
 ### Main container
 
--   Docker Socket Proxy 1.62.1/latest
+-   Docker Socket Proxy 1.26.1/latest
 -   Traefik 2.11.x or 3.0.x
 -   Logger Alpine Linux 3.19 or 3.20
 
