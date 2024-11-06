@@ -57,16 +57,25 @@ make init
 Modified file in `.make/.env` for build image
 
 ```ini
+...
 # Project variables
 DOCKER_REGISTRY=docker.io
 DOCKER_NAMESPACE=asapdotid
 DOCKER_PROJECT_NAME=do-proxy
+
+# Docker image version
+SOCKET_PROXY_VERSION=1.26.2
+TRAEFIK_VERSION=3.1
+ALPINE_VERSION=3.20
+
+# Timezone for os and log level
+TIMEZONE=Asia/Jakarta
 ```
 
 ### Step 3: Make Initial Environment Variables
 
 ```bash
-make set-init
+make env
 ```
 
 Modified file in `src/.env` for build image
@@ -139,7 +148,7 @@ docker network create proxy
 ```
 
 ```bash
-make set-init
+make env
 
 make build
 ```
@@ -183,11 +192,11 @@ Here is a list of supported providers, on this project:
 
 -   Digitalocean
 
-Let's say you have a domain `example.com` and it's DNS records point to your production server. Just repeat the local deployment steps, but don't forget to update `TRAEFIK_DOMAIN_NAME`, `TRAEFIK_ACME_DNS_CHALLENGE_PROVIDER`, `TRAEFIK_ACME_DNS_CHALLENGE_PROVIDER_EMAIL` & `TRAEFIK_ACME_DNS_CHALLENGE_PROVIDER_TOKEN` environment variables. In case of `example.com`, your `.src/.env` file should have the following lines:
+Let's say you have a domain `example.com` and it's DNS records point to your production server. Just repeat the local deployment steps, but don't forget to update `TRAEFIK_DOMAIN_NAME`, `TRAEFIK_ACME_DNS_CHALLENGE_PROVIDER_EMAIL` & `TRAEFIK_ACME_DNS_CHALLENGE_PROVIDER_TOKEN` environment variables. In case of `example.com`, your `src/.env` file should have the following lines:
 
 ```ini
 TRAEFIK_DOMAIN_NAME=example.com
-TRAEFIK_ACME_DNS_CHALLENGE_PROVIDER=digitalocean
+
 TRAEFIK_ACME_DNS_CHALLENGE_PROVIDER_EMAIL=email@mail.com
 TRAEFIK_ACME_DNS_CHALLENGE_PROVIDER_TOKEN=digitalocean-api-domain-token-123ABC
 ```
